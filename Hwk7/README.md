@@ -1,0 +1,1 @@
+Created a light, a sphere, animated the sphere, added two virtual joysticks for the main ship and one of the enemies. Worked with Babylon.js and GameFX.
