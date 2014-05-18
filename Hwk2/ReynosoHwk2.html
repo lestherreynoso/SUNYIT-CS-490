@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Reynoso Guesss The Number Game </title>
+<script src="modernizr.js"></script>
+<script type="text/javascript">
+
+window.addEventListener('load', eventWindowLoaded, false);	
+
+var Debugger = function () { };
+Debugger.log = function (message) {
+	try {
+		console.log(message);
+	} catch (exception) {
+		return;
+	}
+}
+
+function eventWindowLoaded() {
+
+	canvasApp();
+}
+
+function canvasSupport () {
+  	return Modernizr.canvas;
+}
+
+
+function eventWindowLoaded() {
+
+	canvasApp();
+}
+
+
+function canvasApp() {
+	var guesses = 0;
+	var message = "Guess The Number From 100 up to 199 (inclusive)";
+	//var letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"];
+	var today = new Date();
+	var numberToGuess = "";
+	var higherOrLower = "";
+	var numbersGuessed;
+	var gameOver = false;
+	
+	if (!canvasSupport()) {
+			 return;
+  		}
+		
+	var theCanvas = document.getElementById("canvasOne");
+	var context = theCanvas.getContext("2d"); 
+		
+	initGame();
+		
+	function initGame() {
+		
+		numberToGuess = Math.floor(Math.random() * 99 + 100);
+		guesses = 0;
+		numbersGuessed = [];
+		gameOver = false;
+		//window.addEventListener("keydown",eventKeyPressed,true);
+		var formElement = document.getElementById("createImageData");
+		formElement.addEventListener('click', createImageDataPressed, false);		
+		window.addEventListener("clicked",guessMade,true);
+		var getNumberInput = document.getElementById("getGuessedNumber");
+		getNumberInput.addEventListener('click', guessMade , false);
+		drawScreen();
+	}
+	
+	function guessMade {
+		if (!gameOver) {
+			guesses++;
+			numbersGuessed.push(guessedNumber);
+			if (guessedNumber == numberToGuess){
+				gameOver = true;
+			} else { 
+				if (guessedNumber < 100 || guessedNumber > 199) {
+					higherOrLower = "The number is not in range";
+				} else if (guessedNumber > numberToGuess) {
+					higherOrLower = "Lower";
+				} else if (guessNumber > numberToGuess) {
+					higherOrLower = "Higher";
+				}
+			} 
+			drawScreen();
+		}	
+	}			
+			
+	/*function eventKeyPressed(e) {
+		if (!gameOver) {
+			console.log("keycode:" + e.keyCode);
+			var letterPressed = String.fromCharCode(e.keyCode);
+			letterPressed = letterPressed.toLowerCase();
+			guesses++;
+			lettersGuessed.push(letterPressed);
+			
+			if (letterPressed == letterToGuess) {
+				gameOver = true;
+			} else {
+				
+				letterIndex = letters.indexOf(letterToGuess);
+				guessIndex = letters.indexOf(letterPressed);
+				Debugger.log(guessIndex);
+				if (guessIndex < 0) {
+					higherOrLower = "That is not a letter";
+				} else if (guessIndex > letterIndex) {
+					higherOrLower = "Lower";
+				} else {
+					higherOrLower = "Higher";
+				}
+									   
+			}
+			drawScreen();
+		  }
+	}
+	*/
+	
+	function drawScreen() {
+		//Background
+		context.fillStyle = "#ffffaa";
+		context.fillRect(0, 0, 500, 300);
+		//Box
+		context.strokeStyle = "#000000"; 
+		context.strokeRect(5,  5, 490, 290);
+		
+		context.textBaseline = "top";
+		//Date
+		context.fillStyle    = "#000000";
+		context.font         = "10px _san";
+		context.fillText  (today, 150 ,10);
+		//Message
+		context.fillStyle    = "#FF0000";
+		context.font         = "14px Sans-Serif";
+		context.fillText  (message, 125, 30);
+		//Guesses
+		context.fillStyle    = "#109910";
+		context.font         = "16px Sans-Serif";
+		context.fillText  ('Guesses: ' + guesses, 215, 50);
+		//Higher Or Lower
+		context.fillStyle    = "#000000";
+		context.font         = "16px Sans-Serif";
+		context.fillText  ("Higher Or Lower: " + higherOrLower, 150,125);
+		//Numbers Guessed
+		context.fillStyle    = "#FF0000";
+		context.font         = "16px Sans-Serif";
+		//context.fillText  ("Numbers Guessed: " + numbersGuessed.toString(), 10, 260);
+		if (gameOver) {
+			context.fillStyle    = "#FF0000";
+			context.font         = "40px Sans-Serif";
+			context.fillText  ( "You Got it!", 150, 180);
+		}
+																		 
+		
+		
+	}
+	
+	function createImageDataPressed(e) {
+		
+		window.open(theCanvas.toDataURL(),"canavsImage","left=0,top=0,width=" + theCanvas.width + ",height=" + theCanvas.height +",toolbar=0,resizable=0");
+		
+	}
+	
+}
+
+</script> 
+</head>
+<body>
+<div style="position: absolute; top: 50px; left: 50px;">
+<canvas id="canvasOne" width="500" height="300">
+ Your browser does not support HTML 5 Canvas. 
+</canvas>
+<form name = guess>
+Enter an integer and push the process the guess <p>
+<input type = text  name = guessedNumber>
+<input type = button  id = "getGuessedNumber" value = "Get Number">
+</form>
+
+<form>
+<input type="button" id="createImageData" value="Export Canvas Image">
+</form>
+</div>
+</body>
+</html>
+
+
+
+
