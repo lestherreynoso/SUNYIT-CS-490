@@ -1,0 +1,1 @@
+This animates a model of a Nissan GTR to rotate continuously across the Y-axis. Runs in Firefox.
