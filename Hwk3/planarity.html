@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Reynoso Planarity Game </title>
+<script src="js/planarity.js"></script>
+<script type="text/javascript">
+window.addEventListener('load', eventWindowLoaded, false);	
+
+var Debugger = function () { };
+Debugger.log = function (message) {
+	try {
+		console.log(message);
+	} catch (exception) {
+		return;
+	}
+}
+
+function eventWindowLoaded() {
+
+	canvasApp();
+}
+
+function canvasApp() {
+	
+	initGame();
+	
+	function Line(startCircle, endCircle, thickness) {
+	this.startCircle = startCircle;
+	this.endCircle = endCircle;
+	this.thickness = thickness;
+	}
+
+	function Circle(x, y, radius) {	
+	this.x = x;
+	this.y = y;
+	this.radius = radius;
+};
+function drawLine(context, x1, y1, x2, y2, thickness) {
+	context.strokeStyle = "white";
+	context.lineWidth = thickness;
+	context.beginPath();
+	context.moveTo(x1, y1);
+	context.lineTo(x2, y2);
+	context.stroke();
+	context.closePath();
+	
+}
+function drawCircle(context, x, y, radius){
+	context.beginPath();
+	context.strokeStyle = "white";
+	context.lineWidth = 25;
+	context.arc(x, y, radius, (Math.PI/180)*0, (Math.PI/180)*360, false);
+	context.stroke();
+	context.closePath();
+}
+function setupNodes() {	
+	
+	planarity.nodes = [];
+	var graph = levels[planarity.currentLevel];
+	
+	for (var i=0; i<graph.nodes.length; i++) {
+		planarity.nodes.push(new Circle( graph.nodes[i].x, graph.nodes[i].y, 15));
+	}
+}
+function connectNodes()	{	
+	var graph = levels[planarity.currentLevel];
+	planarity.edges = [];
+	for (var p in graph.edges)	{
+			var startCircle = planarity.nodes[p];
+			var neighbors = graph.edges[p].connectedNodes;
+			for (var q in neighbors) {
+					var endCircle = planarity.nodes[neighbors[q]];
+					planarity.edges.push(new Line(startCircle, endCircle, 2));
+					}
+				}
+			}
+			
+function setupCurrentLevel() {
+	setupNodes();
+	connectNodes();
+}
+function draw() {
+
+//get a reference to the canvas element
+	var theCanvas = document.getElementById("canvasOne");
+	//get a reference to 2d context
+	var context = theCanvas.getContext("2d");
+
+//clear the canvas
+	context.fillStyle ="#000000";
+	context.fillRect(0, 0, 600, 400);
+	context.textBaseline = "top";
+	context.fillStyle    = "#FF0000";
+	context.font         = "14px Sans-Serif";
+	context.fillText  ("Reynoso Planarity Game", 125, 30);
+//loop through planarity.edges to draw the lines in the game state
+	for (var i=0; i < planarity.edges.length; i++) {
+		//which line?
+		//the one at position i of course
+		//get its startCircle, endCircle, thickness
+		drawLine(context, planarity.edges[i].startCircle.x, planarity.edges[i].startCircle.y, planarity.edges[i].endCircle.x, planarity.edges[i].endCircle.y, planarity.edges[i].thickness);
+}
+	//loop through planarity.nodes to draw the circles in the game state
+	for (var k=0; k<planarity.nodes.length; k++) {
+		//which circle
+		//the one at position k of coursecontext.fillStyle    = "#FF0000";
+		drawCircle(context, planarity.nodes[k].x, planarity.nodes[k].y, 5);
+		}
+		
+}
+
+//function loopGame(){
+//window.setTimeout(loopGame, 30);
+//draw();
+//}
+
+function initGame() {
+    setupCurrentLevel();
+	//loopGame();
+	//draw();
+	setInterval(draw, 30);
+	
+}
+
+}
+
+</script> 
+</head>
+<body>
+
+<div style="position: absolute; top: 50px; left: 50px;">
+<canvas id="canvasOne" width="600" height="400">
+ Your browser does not support HTML 5 Canvas. 
+</canvas>
+</div>
+</body>
+</html>
