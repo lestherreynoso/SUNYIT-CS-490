@@ -153,8 +153,8 @@ function connectNodes()	{
 			for (var q in neighbors) {
 					var endCircle = planarity.nodes[neighbors[q]];
 					planarity.edges.push(new Line(startCircle, endCircle, 4));
+						 }
 					}
-				}
 			}
 
 function setupCurrentLevel() {
